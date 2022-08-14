@@ -2,6 +2,33 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lanxin-1.github.io/blog/2022/08/07/article-title/</loc>
+    
+    <lastmod>2022-08-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lanxin-1.github.io/blog/2022/08/10/Apache%20Shiro/</loc>
+    
+    <lastmod>2022-08-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lanxin-1.github.io/blog/about/index.html</loc>
+    
+    <lastmod>2022-08-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://lanxin-1.github.io/blog/categories/index.html</loc>
     
     <lastmod>2022-08-10</lastmod>
@@ -11,34 +38,7 @@
   </url>
   
   <url>
-    <loc>https://lanxin-1.github.io/blog/2022/08/10/Apache%20Shiro/</loc>
-    
-    <lastmod>2022-08-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lanxin-1.github.io/blog/about/index.html</loc>
-    
-    <lastmod>2022-08-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://lanxin-1.github.io/blog/2022/08/07/hello-world/</loc>
-    
-    <lastmod>2022-08-07</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lanxin-1.github.io/blog/2022/08/07/article-title/</loc>
     
     <lastmod>2022-08-07</lastmod>
     
