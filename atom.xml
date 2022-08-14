@@ -3,11 +3,11 @@
   <title>uSu渗透吧</title>
   
   
-  <link href="https://lanxin-1.github.io/lanxin.github.io/atom.xml" rel="self"/>
+  <link href="https://lanxin-1.github.io/atom.xml" rel="self"/>
   
-  <link href="https://lanxin-1.github.io/lanxin.github.io/"/>
+  <link href="https://lanxin-1.github.io/"/>
   <updated>2022-08-10T10:08:47.648Z</updated>
-  <id>https://lanxin-1.github.io/lanxin.github.io/</id>
+  <id>https://lanxin-1.github.io/</id>
   
   <author>
     <name>爱意深埋珊瑚海</name>
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Apache Shiro</title>
-    <link href="https://lanxin-1.github.io/lanxin.github.io/2022/08/10/Apache%20Shiro/"/>
-    <id>https://lanxin-1.github.io/lanxin.github.io/2022/08/10/Apache%20Shiro/</id>
+    <link href="https://lanxin-1.github.io/2022/08/10/Apache%20Shiro/"/>
+    <id>https://lanxin-1.github.io/2022/08/10/Apache%20Shiro/</id>
     <published>2022-08-10T10:08:19.000Z</published>
     <updated>2022-08-10T10:08:47.648Z</updated>
     
@@ -38,8 +38,8 @@
   
   <entry>
     <title>Redteam</title>
-    <link href="https://lanxin-1.github.io/lanxin.github.io/2022/08/07/article-title/"/>
-    <id>https://lanxin-1.github.io/lanxin.github.io/2022/08/07/article-title/</id>
+    <link href="https://lanxin-1.github.io/2022/08/07/article-title/"/>
+    <id>https://lanxin-1.github.io/2022/08/07/article-title/</id>
     <published>2022-08-07T07:57:20.000Z</published>
     <updated>2022-08-07T19:14:42.379Z</updated>
     
@@ -51,8 +51,8 @@
   
   <entry>
     <title>BlueTeam</title>
-    <link href="https://lanxin-1.github.io/lanxin.github.io/2022/08/07/hello-world/"/>
-    <id>https://lanxin-1.github.io/lanxin.github.io/2022/08/07/hello-world/</id>
+    <link href="https://lanxin-1.github.io/2022/08/07/hello-world/"/>
+    <id>https://lanxin-1.github.io/2022/08/07/hello-world/</id>
     <published>2022-08-06T18:11:23.273Z</published>
     <updated>2022-08-07T19:15:43.419Z</updated>
     
