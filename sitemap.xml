@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://lanxin-1.github.io/blog/2022/08/16/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</loc>
+    
+    <lastmod>2022-08-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://lanxin-1.github.io/blog/categories/index.html</loc>
+    
+    <lastmod>2022-08-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://lanxin-1.github.io/blog/2022/08/16/BlueTeam/</loc>
     
     <lastmod>2022-08-16</lastmod>
@@ -30,15 +48,6 @@
   
   <url>
     <loc>https://lanxin-1.github.io/blog/home/index.html</loc>
-    
-    <lastmod>2022-08-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://lanxin-1.github.io/blog/categories/index.html</loc>
     
     <lastmod>2022-08-14</lastmod>
     
@@ -91,6 +100,13 @@
   
   <url>
     <loc>https://lanxin-1.github.io/blog/categories/%E8%93%9D%E9%98%9F/</loc>
+    <lastmod>2022-08-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://lanxin-1.github.io/blog/categories/%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/</loc>
     <lastmod>2022-08-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
